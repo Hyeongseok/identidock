@@ -34,14 +34,12 @@ def mainpage():
 @app.route('/monster/<name>')
 def get_identicon(name):
     name = html.escape(name, quote=True)
-    print("Name : " + name);
-    #print("cache : " + cache);
-    #image = cache.get(name)
-    #if image is None:
-    #    print("Cache miss", flush=True)
-    r = requests.get('http://172.17.0.4:8080/monster/' + name + '?size=80')
-    image = r.content
-    #    cache.set(name, image)
+    image = cache.get(name)
+    if image is None:
+        print("Cache miss", flush=True)
+        r = requests.get('http://172.17.0.4:8080/monster/' + name + '?size=80')
+        image = r.content
+        cache.set(name, image)
 
     return Response(image, mimetype='image/png')
 
